@@ -1,0 +1,157 @@
+AWS SAA-C03 考点服务清单
+
+核心架构原则
+成本优化：选择合适的定价模型、按需扩展、存储分层、数据传输成本优化
+高可用与容错：多AZ部署、故障转移机制、备份恢复策略、无单点故障设计
+安全最佳实践：最小权限原则、加密传输与静态数据、网络隔离、审计与合规
+性能优化：缓存策略、CDN加速、读写分离、异步处理、正确的服务选型
+
+计算服务
+Amazon EC2（实例类型选择与优化、实例系列用途（通用/计算优化/内存优化/存储优化/加速计算）、EBS卷类型与IOPS选择、实例存储vs EBS对比、安全组（有状态防火墙）、启动模板、放置组（集群/分区/分布）、用户数据与实例元数据、预留实例/Savings Plans/Spot实例成本对比、专用主机与专用实例、Nitro系统优势、休眠功能、弹性IP、容量预留、EC2实例连接）
+Auto Scaling（动态扩展策略（简单/步进/目标跟踪）、预测性扩展、扩展冷却期、健康检查类型（EC2/ELB）、生命周期挂钩、混合实例策略、实例刷新、终止策略、预热时间配置、扩展活动与容量再平衡）
+Elastic Load Balancing（ALB vs NLB vs GWLB vs CLB选择场景、跨区域负载均衡、目标组类型、健康检查配置、粘性会话（应用Cookie/LB Cookie）、连接耗尽、SSL/TLS终止、SNI支持、ALB路由规则、NLB静态IP与弹性IP、跨可用区负载均衡费用）
+AWS Lambda（并发限制（账户/函数级别）、预置并发vs按需并发、冷启动优化策略、环境变量与加密、Layer依赖管理、版本与别名（加权流量转移）、触发器集成模式、执行角色与资源策略、VPC集成与ENI、死信队列与目标配置、最大执行时间15分钟、内存与CPU配比、Lambda@Edge与CloudFront Functions对比）
+Amazon ECS/EKS（Fargate vs EC2启动类型选择、任务定义与容器定义、服务自动扩展、容器间通信、服务发现（Cloud Map）、负载均衡集成、任务角色与执行角色、ECS Anywhere、EKS托管节点组、Fargate Spot节省成本）
+AWS Elastic Beanstalk（部署策略（一次全部/滚动/附加批次滚动/不可变/蓝绿）、环境配置（Web服务器/工作线程）、扩展策略、.ebextensions配置、平台更新）
+存储服务
+Amazon S3（存储类选择（Standard/IA/One Zone-IA/Glacier Instant Retrieval/Glacier Flexible Retrieval/Glacier Deep Archive/Intelligent-Tiering）、加密方式（SSE-S3/SSE-KMS/SSE-C/客户端加密）、默认加密、存储桶策略vs ACL、版本控制与MFA删除、生命周期策略与转换规则、跨区域复制CRR/同区域复制SRR、复制时间控制RTC、预签名URL、事件通知（SNS/SQS/Lambda/EventBridge）、对象锁定（治理模式/合规模式）、S3访问点与多区域访问点、S3 Object Lambda、S3 Select与Glacier Select、多部分上传与传输加速、S3 Batch Operations、静态网站托管、阻止公共访问设置、S3存储镜头、请求者付款、跨账户访问）
+Amazon EBS（卷类型选择（gp2/gp3/io1/io2/io2 Block Express/st1/sc1）、IOPS与吞吐量配置、快照与增量快照、快照生命周期管理（DLM）、加密（默认加密/复制加密）、多重挂载（io1/io2限制）、RAID 0/RAID 1配置场景、弹性卷（在线调整大小/类型/IOPS）、快照跨区域复制、EBS优化实例）
+Amazon EFS（性能模式（通用/最大IO）、吞吐模式（突发/预配置/弹性）、存储类（标准/IA）与智能分层、生命周期管理、挂载目标与安全组、跨AZ高可用访问、EFS访问点、与EC2/Lambda/ECS集成、传输加密、跨区域复制、与本地NFS对比）
+Amazon FSx（FSx for Windows File Server（SMB协议/AD集成/DFS命名空间）、FSx for Lustre（HPC场景/S3集成/持久性vs临时性部署）、FSx for NetApp ONTAP（多协议/快照/SnapMirror）、FSx for OpenZFS、选择场景对比）
+AWS Storage Gateway（S3文件网关、FSx文件网关、卷网关（缓存模式/存储模式）、磁带网关、混合云存储场景、带宽管理、缓存刷新）
+AWS Backup（备份计划与规则、保留策略·、跨区域备份、跨账户备份、备份保管库与访问策略、时间点恢复、合规性报告）
+数据库服务
+Amazon RDS（Multi-AZ部署（同步复制/自动故障转移）vs 读副本（异步复制/跨区域）、Multi-AZ集群部署、自动备份与手动快照、备份保留期、加密（静态加密/传输加密）、参数组与选项组、实例类型选择与存储类型、存储自动扩展、维护窗口与版本升级、RDS代理（连接池/IAM认证/故障转移）、IAM数据库认证、性能洞察、增强监控、事件订阅、跨区域只读副本）
+Amazon Aurora（MySQL/PostgreSQL兼容、存储自动扩展最高128TB、6路复制跨3个AZ、全局数据库（跨区域灾备/低延迟读取）、Aurora Serverless v1/v2（按需扩展/自动暂停）、克隆（快速复制）、回溯（时间点回退）、并行查询、自定义端点（读写分离）、故障转移优先级、Aurora多主集群、Aurora机器学习集成）
+Amazon DynamoDB（分区键设计与热分区避免、GSI全局二级索引/LSI本地二级索引、按需容量vs预配置容量、DynamoDB Streams（变更数据捕获）、全局表（多区域主动-主动）、DAX加速器（微秒级延迟）、时间点恢复PITR、按需备份、加密（静态加密/传输加密）、事务支持、自动扩展、批量操作（BatchGetItem/BatchWriteItem）、TTL自动过期、条件写入与乐观锁）
+Amazon ElastiCache（Redis vs Memcached选择（持久性/复制/数据结构）、Redis集群模式（分片）、Redis读副本与自动故障转移、快照与备份、Redis AUTH认证、传输加密TLS、Redis全局数据存储、缓存策略（延迟加载/直写/TTL）、ElastiCache Serverless）
+Amazon Redshift（列式存储、分布样式（KEY/EVEN/ALL/AUTO）、排序键（复合/交错）、Redshift Spectrum（S3直接查询）、并发扩展、WLM工作负载管理、快照与跨区域复制、增强型VPC路由、Redshift Serverless、数据共享、Redshift ML、与S3 COPY/UNLOAD集成）
+Amazon Neptune（图数据库、Gremlin/SPARQL支持、社交网络/推荐引擎/欺诈检测场景）
+Amazon DocumentDB（MongoDB兼容、文档数据库场景、自动扩展存储）
+Amazon Timestream（时序数据库、IoT/运维监控场景、自动分层存储）
+Amazon QLDB（账本数据库、不可变事务日志、加密验证）
+Amazon Keyspaces（Cassandra兼容、无服务器宽列数据库）
+Amazon MemoryDB for Redis（持久性内存数据库、微秒读取/毫秒写入）
+网络服务
+Amazon VPC（子网设计（公有/私有/隔离）、路由表配置、互联网网关IGW、NAT网关vs NAT实例（高可用/成本/性能对比）、仅出口互联网网关（IPv6）、VPC对等连接（非传递性）、Transit Gateway（集中式网络枢纽）、VPC端点（Gateway端点免费用于S3/DynamoDB、Interface端点使用PrivateLink）、网络ACL（无状态/子网级别）vs安全组（有状态/实例级别）、VPC流日志（分析与故障排除）、CIDR规划与扩展、VPC共享、Reachability Analyzer、Network Access Analyzer、AWS Network Firewall（有状态检查/入侵防护）、弹性网络接口ENI）
+AWS Direct Connect（专用连接（1/10/100Gbps）vs托管连接、虚拟接口（私有/公有/传输）、LAG链路聚合、Direct Connect Gateway（多区域/多VPC）、专线+VPN备份、故障转移设计、BGP路由、MACsec加密）
+Amazon Route 53（路由策略详解（简单/加权/延迟/故障转移/地理位置/地理临近/多值/IP）、健康检查（端点/计算/CloudWatch告警）、私有托管区域、流量流可视化策略、DNSSEC签名、别名记录vs CNAME、域名注册、解析器（入站/出站端点）、Route 53 Application Recovery Controller）
+AWS Global Accelerator（与CloudFront对比（TCP/UDP vs HTTP缓存）、静态任播IP、健康检查与故障转移、端点组权重、客户端亲和性、跨区域冗余）
+Amazon CloudFront（缓存行为配置、源故障转移（源组）、OAC/OAI（S3私有内容访问）、字段级加密、Lambda@Edge vs CloudFront Functions（用例对比）、地理限制、签名URL/签名Cookie、实时日志、缓存策略与源请求策略、响应头策略、WebSocket支持、HTTP/3支持）
+AWS VPN（Site-to-Site VPN配置、Client VPN（远程访问）、加速Site-to-Site VPN（Global Accelerator）、VPN CloudHub（多站点互联）、冗余VPN连接设计）
+AWS PrivateLink（VPC端点服务、跨账户私有访问、网络负载均衡器集成、无需VPC对等/NAT/IGW）
+AWS Transit Gateway（多VPC互联架构、路由表分段、对等连接（跨区域）、与Direct Connect/VPN集成、多播支持、Network Manager）
+安全与身份服务
+IAM（用户、组、角色设计、策略类型（AWS托管/客户托管/内联）、基于身份策略vs基于资源策略、权限边界、服务控制策略SCP、跨账户访问（AssumeRole）、联合身份（SAML 2.0/OIDC/自定义）、Web身份联合、MFA强制、访问密钥轮换、IAM Access Analyzer（识别外部访问）、IAM凭证报告、策略评估逻辑、最小权限原则实践、IAM Identity Center（SSO单点登录））
+AWS KMS（客户主密钥CMK（对称/非对称）、AWS托管密钥vs客户托管密钥vs AWS拥有密钥、密钥策略、密钥授权、自动密钥轮换、信封加密原理、跨区域密钥（多区域密钥）、密钥删除等待期、与服务集成（S3/EBS/RDS等）、CloudHSM对比）
+AWS CloudHSM（硬件安全模块、密钥完全控制、高可用集群、与KMS集成、合规要求场景）
+AWS Secrets Manager（自动密钥轮换、与RDS/Redshift/DocumentDB集成、跨区域复制、版本管理、与Parameter Store对比）
+AWS Certificate Manager（公有证书免费、私有CA、证书自动续订、与ALB/CloudFront/API Gateway集成、区域限制、ACM私有CA）
+AWS WAF（Web ACL规则优先级、规则组（AWS托管/Partner托管/自定义）、速率限制规则、IP集、正则表达式模式集、SQL注入/XSS防护、与ALB/CloudFront/API Gateway集成、日志记录）
+AWS Shield（Standard免费DDoS防护、Advanced高级防护（专家支持/成本保护/高级指标）、与Route 53/CloudFront/ALB集成）
+AWS Firewall Manager（跨账户安全策略集中管理、与WAF/Shield/安全组/Network Firewall集成）
+Amazon GuardDuty（智能威胁检测、VPC流日志/DNS日志/CloudTrail分析、恶意IP/异常行为检测、与Security Hub/EventBridge集成、多账户管理）
+AWS Security Hub（安全合规检查汇总、CIS基准/PCI DSS/AWS最佳实践标准、与GuardDuty/Inspector/Macie集成、跨账户跨区域聚合）
+Amazon Inspector（EC2/Lambda/ECR漏洞扫描、CVE数据库、网络可达性分析、持续扫描）
+Amazon Macie（S3敏感数据发现与分类、PII/财务数据检测、数据安全态势、与Security Hub集成）
+Amazon Detective（安全事件调查、自动数据收集与分析、可视化关联）
+AWS Cognito（用户池（用户目录/认证）、身份池（临时AWS凭证）、联合身份提供商集成、自定义认证流程、Lambda触发器、高级安全功能）
+AWS Systems Manager（Parameter Store（明文/加密参数/层级结构）、Session Manager（无需SSH/堡垒机）、Patch Manager（补丁合规）、Run Command（批量执行）、Automation（运维自动化）、State Manager、Inventory、与其他服务集成）
+AWS Resource Access Manager RAM（跨账户资源共享、Transit Gateway/子网/License Manager共享）
+应用集成服务
+Amazon SQS（标准队列（至少一次/无序）vs FIFO队列（恰好一次/有序/300 TPS限制）、可见性超时配置、死信队列DLQ（重试策略）、长轮询vs短轮询（成本优化）、延迟队列与消息延迟、消息保留期（最长14天）、消息大小限制（256KB/扩展客户端库）、与Lambda集成（事件源映射）、解耦架构模式、临时队列）
+Amazon SNS（发布订阅模式、主题类型（标准/FIFO）、消息过滤策略、扇出模式（SNS+SQS）、消息传递重试、消息归档、移动推送通知、SMS消息、与Lambda/SQS/HTTP端点集成、跨账户订阅、消息属性）
+AWS Step Functions（标准工作流vs Express工作流、状态机设计（Task/Choice/Parallel/Map/Wait）、错误处理与重试、与Lambda/ECS/Batch集成、回调模式、服务集成模式、执行历史与调试）
+Amazon EventBridge（事件总线（默认/自定义/SaaS合作伙伴）、事件规则与模式匹配、计划表达式（cron/rate）、存档与重放、Schema注册表、跨账户事件、API目标、事件驱动架构核心）
+Amazon MQ（托管ActiveMQ/RabbitMQ、与本地消息代理迁移、JMS/AMQP/MQTT协议支持、高可用部署、与SQS/SNS选型对比）
+AWS AppSync（托管GraphQL API、实时订阅、离线数据同步、与DynamoDB/Lambda/HTTP数据源集成、解析器、认证方式）
+Amazon API Gateway（REST API vs HTTP API vs WebSocket API对比、授权方式（IAM/Cognito/Lambda）、使用计划与API密钥、限流与配额、请求响应转换、缓存配置、与Lambda代理集成vs非代理集成、阶段变量与金丝雀发布、跨域CORS、自定义域名）
+监控与管理服务
+Amazon CloudWatch（指标（标准/自定义/高分辨率）、日志（日志组/日志流/保留策略）、告警（静态阈值/异常检测/复合告警）、仪表板、Logs Insights查询语言、指标过滤器（从日志创建指标）、事件规则（迁移到EventBridge）、Container Insights（ECS/EKS监控）、Lambda Insights、Contributor Insights、Application Insights、Synthetics（金丝雀测试）、RUM（真实用户监控）、跨账户跨区域仪表板、告警操作（EC2/Auto Scaling/SNS））
+AWS CloudTrail（管理事件vs数据事件vs Insights事件、多区域跟踪、组织跟踪、日志文件完整性验证、与S3/CloudWatch Logs集成、CloudTrail Lake（SQL查询）、事件历史（90天免费）、安全分析与合规审计）
+AWS Config（配置记录器、配置项快照、托管规则vs自定义规则、修复操作（自动/手动）、聚合器（多账户多区域）、合规性时间线、与Systems Manager集成自动修复、配置变更通知）
+AWS Trusted Advisor（检查类别（成本优化/性能/安全/容错/服务限制/运营卓越）、Business/Enterprise Support完整检查、与CloudWatch集成、刷新间隔、优先级建议）
+AWS Organizations（组织单元OU层级设计、服务控制策略SCP（允许列表vs拒绝列表）、标签策略、备份策略、AI服务选择退出策略、整合账单与成本分配、与RAM跨账户资源共享、AWS账户工厂）
+AWS Control Tower（着陆区Landing Zone、护栏Guardrails（预防性/检测性/主动性）、账户工厂Account Factory、与Organizations集成、合规仪表板、定制化）
+AWS Service Catalog（产品组合、产品版本控制、启动约束、标签选项、自助服务门户、与Organizations共享）
+AWS Well-Architected Tool（六大支柱评估、工作负载审查、改进计划、镜头扩展）
+AWS Health（个人健康仪表板、组织级健康、事件类型、与EventBridge集成自动化响应）
+AWS License Manager（许可证跟踪、许可证规则、与EC2/RDS集成、跨账户共享）
+AWS Compute Optimizer（EC2/EBS/Lambda优化建议、节省机会、与Organizations集成）
+AWS Cost Explorer（成本分析与预测、预留实例建议、Savings Plans建议、成本异常检测）
+AWS Budgets（预算类型（成本/使用量/预留/Savings Plans）、预算告警与操作、与SNS集成）
+迁移与传输服务
+AWS Database Migration Service DMS（同构迁移vs异构迁移、持续复制CDC、Schema Conversion Tool SCT、迁移任务类型（全量/CDC/全量+CDC）、复制实例、源端点与目标端点、数据验证、大型表并行加载、与Snowball Edge集成大规模迁移）
+AWS DataSync（在线数据传输加速、支持NFS/SMB/HDFS/S3/EFS/FSx、调度与带宽限制、数据完整性验证、增量传输、与Storage Gateway对比）
+AWS Snow Family（Snowcone（8TB/边缘计算）、Snowball Edge Storage Optimized（80TB）、Snowball Edge Compute Optimized（GPU支持）、Snowmobile（100PB级）、选择场景与数据量阈值、OpsHub管理、边缘计算能力、数据传输时间估算）
+AWS Application Migration Service MGN（Lift-and-shift迁移、持续复制、测试与切换、与SMS对比、支持的操作系统）
+AWS Transfer Family（SFTP/FTPS/FTP/AS2托管服务、与S3/EFS集成、身份提供商集成、终端节点类型）
+AWS Migration Hub（迁移跟踪中心、与MGN/DMS集成、应用程序分组、策略建议）
+AWS Application Discovery Service（服务器发现与依赖关系映射、代理vs无代理收集、与Migration Hub集成）
+分析服务
+Amazon Athena（无服务器交互式查询、S3数据直接分析、分区优化与投影、数据格式优化（Parquet/ORC）、工作组与成本控制、与Glue数据目录集成、联合查询、CTAS创建表、查询结果缓存）
+Amazon Kinesis（Data Streams（实时流处理/分片/保留期/增强型扇出）、Data Firehose（近实时投递/自动扩展/数据转换）、Data Analytics（SQL/Flink流处理）、Video Streams（视频流处理）、各服务选型对比、分片拆分与合并、按需容量模式）
+AWS Glue（无服务器ETL、数据目录（Hive元存储兼容）、爬网程序（自动发现架构）、作业书签（增量处理）、开发端点、Glue Studio可视化、与Athena/Redshift/EMR集成、数据质量）
+Amazon EMR（托管Hadoop/Spark/Hive/Presto、实例组vs实例队列、主节点/核心节点/任务节点、Spot实例节省成本、EMR Serverless、EMR on EKS、EMRFS（S3一致性）、集群扩展）
+Amazon QuickSight（无服务器BI可视化、SPICE内存引擎、与多数据源集成、行级安全、仪表板嵌入、ML Insights、Q自然语言查询）
+Amazon OpenSearch Service（日志分析与全文搜索、与Kinesis Firehose集成、UltraWarm与冷存储、跨集群复制、细粒度访问控制、OpenSearch Serverless、VPC访问）
+AWS Data Pipeline（数据工作流编排、与EMR/S3/RDS集成、活动/资源/调度、故障处理）
+AWS Lake Formation（数据湖构建与治理、集中权限管理（列级/行级）、数据共享、蓝图、与Glue集成、跨账户访问）
+Amazon MSK（托管Kafka、MSK Connect、MSK Serverless、与Kinesis对比、安全配置、与Lambda/S3/OpenSearch集成）
+Amazon Redshift Serverless（无需管理集群、按用量计费、与Redshift对比）
+AWS Clean Rooms（跨组织数据协作分析、隐私保护）
+开发者工具
+AWS CodeCommit（托管Git代码仓库、与IAM集成、加密、触发器与通知）
+AWS CodeBuild（托管构建服务、buildspec.yml配置、构建环境、缓存优化、与VPC集成、报告组）
+AWS CodeDeploy（部署策略（一次全部/半数/逐个/蓝绿/金丝雀/线性）、AppSpec配置、钩子脚本、回滚配置、部署组、与EC2/Lambda/ECS集成）
+AWS CodePipeline（CI/CD流水线编排、阶段与操作、手动批准、跨区域部署、与第三方工具集成、管道执行模式）
+AWS CloudFormation（基础设施即代码、模板结构（Parameters/Mappings/Conditions/Resources/Outputs）、堆栈策略、StackSets（多账户多区域）、嵌套堆栈、变更集预览、漂移检测、自定义资源、辅助脚本（cfn-init/cfn-signal）、回滚触发器、删除策略（Retain/Snapshot）、导入现有资源）
+AWS SAM（无服务器应用模型、SAM模板简化、SAM CLI本地测试、与CloudFormation关系）
+AWS CDK（编程方式定义基础设施、构造级别、与CloudFormation关系）
+AWS CodeArtifact（软件包管理、与npm/Maven/pip集成、上游仓库）
+AWS Cloud9（云IDE、与Lambda集成开发）
+机器学习服务
+Amazon SageMaker（训练作业、模型部署、推理端点类型（实时/批量/异步/无服务器）、笔记本实例、SageMaker Studio、内置算法、自动模型调优、Feature Store、Model Registry、Pipelines）
+Amazon Rekognition（图像/视频分析、人脸检测与比对、内容审核、名人识别、自定义标签）
+Amazon Comprehend（自然语言处理、情感分析、实体识别、主题建模、自定义分类）
+Amazon Translate（神经网络机器翻译、自定义术语、批量翻译）
+Amazon Polly（文本转语音、神经语音、词典与SSML、语音合成标记）
+Amazon Transcribe（语音转文本、实时转录、自定义词汇、说话人识别）
+Amazon Lex（对话式AI、聊天机器人、意图与槽位、与Lambda集成）
+Amazon Textract（文档文本与表格提取、表单分析、费用分析）
+Amazon Forecast（时间序列预测、数据集与预测器）
+Amazon Personalize（个性化推荐、实时推荐、批量推荐）
+Amazon Kendra（企业智能搜索、数据源连接器、FAQ）
+Amazon Bedrock（托管基础模型访问、模型选择）
+其他重要服务
+AWS Batch（批处理作业调度、计算环境（托管/非托管）、作业队列优先级、作业定义、数组作业、与Spot实例集成节省成本、公平共享调度）
+Amazon SES（电子邮件发送与接收、配置集、专用IP、域名验证、退信与投诉处理、发送配额）
+Amazon Pinpoint（营销通信、用户分群、活动管理、分析）
+AWS X-Ray（分布式追踪、服务地图、性能分析、与Lambda/API Gateway/ECS集成、采样规则、X-Ray守护进程）
+Amazon WorkSpaces（托管虚拟桌面DaaS、协议（PCoIP/WSP）、运行模式（按需/始终运行）、镜像管理、目录集成）
+Amazon AppStream 2.0（应用流式传输、堆栈与队列、镜像生成器、用户设置）
+AWS Directory Service（AWS Managed Microsoft AD、AD Connector（代理到本地）、Simple AD、信任关系、与其他AWS服务集成）
+AWS Outposts（本地AWS基础设施、机架vs服务器、延迟敏感场景）
+AWS Wavelength（5G边缘计算、超低延迟应用）
+AWS Local Zones（本地扩展区域、延迟敏感工作负载）
+Amazon Connect（云联络中心、客户语音与聊天）
+AWS IoT Core（物联网设备连接、MQTT协议、规则引擎、设备影子）
+AWS Amplify（Web与移动应用开发、托管、CI/CD）
+AWS AppConfig（应用程序配置管理、功能标志、渐进式部署）
+Amazon Elastic Transcoder（媒体转码、预设、管道、与S3集成）
+AWS Elemental MediaConvert（视频处理、编码、打包）
+Amazon CloudSearch（托管搜索服务、与OpenSearch对比）
+
+高可用与灾备架构模式
+多AZ部署（RDS Multi-AZ/Aurora/ElastiCache/EFS等）
+多区域架构（Route 53故障转移/Aurora全局数据库/DynamoDB全局表/S3跨区域复制）
+备份与恢复策略（备份与恢复/试点灯/温备/热备/多站点主动-主动）
+RTO与RPO概念与计算
+故障转移自动化（Route 53健康检查/ASG/ALB）
+
+成本优化策略汇总
+计算优化（预留实例/Savings Plans/Spot实例/Auto Scaling/正确调整实例大小/Lambda按调用计费）
+存储优化（S3存储类与生命周期/EBS卷类型选择/S3 Intelligent-Tiering/压缩与去重）
+数据传输优化（CloudFront缓存/VPC端点/同区域部署/压缩传输）
+数据库优化（预留实例/Aurora Serverless/DynamoDB按需模式/读副本卸载读取）
+监控与治理（Cost Explorer/Budgets/Trusted Advisor/Compute Optimizer/Reserved Instance利用率）
